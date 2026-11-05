@@ -1,6 +1,6 @@
 {
-  "version": "2.0.0",
-  "url": "HelpHerb_PCU_V2-Setup-2.0.0.exe",
-  "sha256": "cf95da5fdc9bb24b8f95471ec91a14096b2eb8a27cf2bd09a06ec46f171bc99c",
-  "notes": "HelpHerb_PCU V.2 เวอร์ชัน 2.0.0"
+    "version":  "2.3.0",
+    "url":  "https://github.com/StarLordN/helpherb-update/releases/download/v2.3.0/HelpHerb_PCU_V2-Setup-2.3.0.exe",
+    "sha256":  "71dfcae2888f1e933165638ccb1a06989e637e802795152207deca8c7be31f12",
+    "notes":  "HelpHerb_PCU V.2 เวอร์ชัน 2.3.0: อ่าน HN จากหัวข้อมูลผู้ป่วยและตรวจชื่อ, จำสิทธิรายผู้ป่วย, อ่านตาราง CC/วินิจฉัยด้วย OCR ภาษาไทย"
 }
