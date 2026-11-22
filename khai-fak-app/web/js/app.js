@@ -1,4 +1,4 @@
-import { makeT } from "./i18n.js";
+import { makeT, LANGS, langInfo } from "./i18n.js";
 import { creditLimit, redemptionAmount, addMonths, reminderDates } from "./calc.js";
 import { validateStep, validateInterest, PROVINCES, TYPES } from "./validate.js";
 import { DEALS, dealById } from "./data.js";
@@ -35,7 +35,7 @@ function esc(v) {
   return String(v ?? "").replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 }
-const locale = () => (S.lang === "th" ? "th-TH" : "en-US");
+const locale = () => langInfo(S.lang).locale;
 const money = (n) => `${Number(n).toLocaleString(locale())} ${t("baht")}`;
 const pct = (n) => `${Number(n) * 100}%`;
 function dateText(iso) {
@@ -293,8 +293,13 @@ function tabItems() {
 function renderChrome(page) {
   brandEl.textContent = t("brand");
   demoEl.textContent = t("demo");
-  langBtn.textContent = S.lang === "th" ? "EN" : "ไทย";
-  document.documentElement.lang = S.lang;
+  const info = langInfo(S.lang);
+  if (!langBtn.options.length) {
+    langBtn.innerHTML = LANGS.map((l) => `<option value="${l.code}">${esc(l.label)}</option>`).join("");
+  }
+  langBtn.value = S.lang;
+  document.documentElement.lang = info.code;
+  document.documentElement.dir = info.dir;
   tabsEl.innerHTML = tabItems()
     .map(([key, label, href]) => {
       const active = (key === "home" && page === "home") || key === page;
@@ -418,8 +423,8 @@ app.addEventListener("click", (e) => {
   }
 });
 
-langBtn.addEventListener("click", () => {
-  S.lang = S.lang === "th" ? "en" : "th";
+langBtn.addEventListener("change", () => {
+  S.lang = langInfo(langBtn.value).code;
   save("lang", S.lang);
   t = makeT(S.lang);
   render();

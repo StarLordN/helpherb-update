@@ -46,6 +46,12 @@ await page.getByRole("button", { name: "จำลองการยืนยั�
 await page.goto(BASE + "#/deals");
 await expect(await page.getByText("นนทบุรี").count() > 0, "deals visible after verification");
 
+// Language switch: Arabic must switch the page to right-to-left, and back to Thai
+await page.locator("#lang").selectOption("ar");
+await expect(await page.evaluate(() => document.documentElement.dir) === "rtl", "arabic is rtl");
+await page.locator("#lang").selectOption("th");
+await expect(await page.evaluate(() => document.documentElement.dir) === "ltr", "thai is ltr");
+
 await page.screenshot({ path: process.env.SHOT || "smoke-deals.png" });
 await browser.close();
 

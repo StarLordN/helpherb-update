@@ -32,8 +32,18 @@ test("investor interest form validates name, email and amount", () => {
   assert.equal(validateInterest({ name: "J", email: "x", amount: 0 }).amount, "err_invest_amount");
 });
 
-test("both UI languages define the same keys", () => {
-  assert.deepEqual(Object.keys(dict.en).sort(), Object.keys(dict.th).sort());
+test("all eight UI languages define the same keys as Thai", () => {
+  const base = Object.keys(dict.th).sort();
+  for (const code of ["en", "lo", "my", "zh", "ja", "ar", "id"]) {
+    assert.deepEqual(Object.keys(dict[code]).sort(), base, `keys differ for ${code}`);
+    for (const k of base) assert.ok(String(dict[code][k]).trim().length > 0, `${code}.${k} is empty`);
+  }
+});
+
+test("language list covers all eight dictionaries", async () => {
+  const { LANGS } = await import("../web/js/i18n.js");
+  assert.deepEqual(LANGS.map((l) => l.code).sort(), Object.keys(dict).sort());
+  assert.equal(LANGS.find((l) => l.code === "ar").dir, "rtl");
 });
 
 test("sample deals are internally consistent", () => {

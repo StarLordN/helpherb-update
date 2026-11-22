@@ -122,6 +122,36 @@ export const dict = {
   },
 };
 
+import lo from "./locales/lo.js";
+import my from "./locales/my.js";
+import zh from "./locales/zh.js";
+import ja from "./locales/ja.js";
+import ar from "./locales/ar.js";
+import id from "./locales/id.js";
+
+dict.lo = lo;
+dict.my = my;
+dict.zh = zh;
+dict.ja = ja;
+dict.ar = ar;
+dict.id = id;
+
+// Language list for the selector. Arabic is right-to-left.
+export const LANGS = [
+  { code: "th", label: "ไทย", locale: "th-TH", dir: "ltr" },
+  { code: "en", label: "English", locale: "en-US", dir: "ltr" },
+  { code: "lo", label: "ລາວ", locale: "lo-LA", dir: "ltr" },
+  { code: "my", label: "မြန်မာ", locale: "my-MM", dir: "ltr" },
+  { code: "zh", label: "中文", locale: "zh-CN", dir: "ltr" },
+  { code: "ja", label: "日本語", locale: "ja-JP", dir: "ltr" },
+  { code: "ar", label: "العربية", locale: "ar", dir: "rtl" },
+  { code: "id", label: "Bahasa Indonesia", locale: "id-ID", dir: "ltr" },
+];
+
+export function langInfo(code) {
+  return LANGS.find((l) => l.code === code) || LANGS[0];
+}
+
 export function makeT(lang) {
   return function t(key, vars) {
     let s = (dict[lang] && dict[lang][key]) ?? dict.en[key] ?? key;
