@@ -122,6 +122,7 @@ export const dict = {
   },
 };
 
+import { copy, COPY_KEYS } from "./copy.js";
 import lo from "./locales/lo.js";
 import my from "./locales/my.js";
 import zh from "./locales/zh.js";
@@ -129,6 +130,8 @@ import ja from "./locales/ja.js";
 import ar from "./locales/ar.js";
 import id from "./locales/id.js";
 
+dict.th = { ...dict.th, ...copy.th };
+dict.en = { ...dict.en, ...copy.en };
 dict.lo = lo;
 dict.my = my;
 dict.zh = zh;
@@ -137,6 +140,9 @@ dict.ar = ar;
 dict.id = id;
 
 // Language list for the selector. Arabic is right-to-left.
+export { COPY_KEYS };
+
+// Languages without a translation of the extra pages fall back to English for those keys.
 export const LANGS = [
   { code: "th", label: "ไทย", locale: "th-TH", dir: "ltr" },
   { code: "en", label: "English", locale: "en-US", dir: "ltr" },

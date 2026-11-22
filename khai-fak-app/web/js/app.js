@@ -45,11 +45,16 @@ function dateText(iso) {
 const typeLabel = (k) => t({ house: "typeHouse", land: "typeLand", condo: "typeCondo" }[k] || "typeHouse");
 const statusLabel = () => t("status_new");
 const errText = (code) => t(code || "err_required");
+const list = (key) => {
+  const v = t(key);
+  return Array.isArray(v) ? v : [];
+};
+const row = (k, v) => `<div class="row"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`;
 
 function current() {
   const raw = location.hash.replace(/^#\/?/, "");
   const [page, ...rest] = raw.split("/");
-  return { page: page || "home", arg: rest.join("/") || null };
+  return { page: page || "home", arg: rest.length ? decodeURIComponent(rest.join("/")) : null };
 }
 
 function calcResult(f) {
@@ -74,7 +79,111 @@ function pageHome() {
     <div class="cards">
       <a class="card" href="#/apply"><h2>${esc(t("homeOwner"))}</h2><p>${esc(t("homeOwnerDesc"))}</p></a>
       <a class="card alt" href="#/deals"><h2>${esc(t("homeInvestor"))}</h2><p>${esc(t("homeInvestorDesc"))}</p></a>
+    </div>
+    <div class="links">
+      <a href="#/khai-fak">${esc(t("svcTitle"))}</a>
+      <a href="#/learn">${esc(t("footerLearn"))}</a>
+      <a href="#/faq">${esc(t("faqTitle"))}</a>
+      <a href="#/contact">${esc(t("contactTitle"))}</a>
     </div>`;
+}
+
+function pageService() {
+  return `
+    <h1>${esc(t("svcTitle"))}</h1>
+    <p class="lede">${esc(t("svcLede"))}</p>
+    <p class="note">${esc(t("svcOwner"))}</p>
+    <div class="panel">
+      <h2>${esc(t("svcTermsTitle"))}</h2>
+      <p>${esc(t("svcRate"))}</p>
+      <p>${esc(t("svcLimit"))}</p>
+      <p>${esc(t("svcTerm"))}</p>
+      <p>${esc(t("svcFee"))}</p>
+    </div>
+    <h2>${esc(t("svcByType"))}</h2>
+    <div class="chips">${TYPES.map((k) => `<a class="chip" href="#/khai-fak/${k}">${esc(typeLabel(k))}</a>`).join("")}</div>
+    <h2>${esc(t("svcByProvince"))}</h2>
+    <div class="chips">${PROVINCES.map((p) => `<a class="chip" href="#/khai-fak/${encodeURIComponent(p)}">${esc(p)}</a>`).join("")}</div>
+    <div class="actions"><a class="btn" href="#/khai-fak/steps">${esc(t("svcSteps"))}</a>
+      <a class="btn ghost" href="#/tools">${esc(t("toolsLink"))}</a></div>`;
+}
+
+function pageType(type) {
+  return `
+    <h1>${esc(t("svcTitle"))} · ${esc(typeLabel(type))}</h1>
+    <p class="lede">${esc(t("typeLede"))}</p>
+    <div class="actions"><button class="btn" type="button" data-action="prefill-type" data-type="${esc(type)}">${esc(t("applyTitle"))}</button>
+      <a class="btn ghost" href="#/khai-fak">${esc(t("backHome"))}</a></div>`;
+}
+
+function pageProvince(p) {
+  return `
+    <h1>${esc(t("svcTitle"))} · ${esc(p)}</h1>
+    <p class="lede">${esc(t("provinceLede"))}</p>
+    <div class="actions"><button class="btn" type="button" data-action="prefill-province" data-province="${esc(p)}">${esc(t("applyTitle"))}</button>
+      <a class="btn ghost" href="#/khai-fak">${esc(t("backHome"))}</a></div>`;
+}
+
+function pageSteps() {
+  return `
+    <h1>${esc(t("stepsTitle"))}</h1>
+    <ol class="numbered">${list("steps").map((s) => `<li>${esc(s)}</li>`).join("")}</ol>
+    <div class="actions"><a class="btn" href="#/apply">${esc(t("navApply"))}</a></div>`;
+}
+
+function pageFaq() {
+  return `
+    <h1>${esc(t("faqTitle"))}</h1>
+    <div class="list">
+      ${list("faq").map(([q, a]) => `<div class="panel"><h2>${esc(q)}</h2><p>${esc(a)}</p></div>`).join("")}
+    </div>`;
+}
+
+function pageContact() {
+  return `<h1>${esc(t("contactTitle"))}</h1><p>${esc(t("contactText"))}</p>`;
+}
+
+function pageJamnong() {
+  return `<h1>${esc(t("jamnongTitle"))}</h1><p class="note">${esc(t("jamnongText"))}</p>`;
+}
+
+function pageDownloads() {
+  return `<h1>${esc(t("downloadsTitle"))}</h1><p class="note">${esc(t("downloadsText"))}</p>`;
+}
+
+function pageLearnIndex() {
+  return `
+    <h1>${esc(t("learnTitle"))}</h1>
+    <p class="note">${esc(t("learnIndexLede"))}</p>
+    <div class="list">
+      <a class="card" href="#/learn/what-is-redemption"><h2>${esc(t("articleTitle"))}</h2></a>
+      <a class="card" href="#/learn/downloads"><h2>${esc(t("downloadsTitle"))}</h2></a>
+    </div>`;
+}
+
+function pageArticle() {
+  return `
+    <h1>${esc(t("articleTitle"))}</h1>
+    ${list("articleBody").map((p) => `<p>${esc(p)}</p>`).join("")}
+    <div class="actions"><a class="btn ghost" href="#/learn">${esc(t("learnTitle"))}</a></div>`;
+}
+
+function pageLp(campaign) {
+  return `
+    <section class="hero"><h1>${esc(t("lpTitle"))}</h1><p class="lede">${esc(t("lpBody"))}</p></section>
+    <div class="actions"><a class="btn" href="#/apply">${esc(t("lpCta"))}</a></div>
+    <p class="note">${esc(campaign || "")}</p>`;
+}
+
+function pageInvestor() {
+  if (!S.verified) return pageDeals();
+  const items = S.interests.length
+    ? S.interests.map((i) => `<li><strong>${esc(i.id)}</strong> · ${esc(i.dealId || "-")} · ${esc(money(i.amount))}</li>`).join("")
+    : `<li>${esc(t("investorEmpty"))}</li>`;
+  return `
+    <h1>${esc(t("investorTitle"))}</h1>
+    <ul class="plain">${items}</ul>
+    <p class="note">${esc(t("investorDocs"))}</p>`;
 }
 
 function pageCalc() {
@@ -88,7 +197,6 @@ function pageCalc() {
       err = errText(ERR[e.code]);
     }
   }
-  const row = (k, v) => `<div class="row"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`;
   return `
     <h1>${esc(t("calcTitle"))}</h1>
     <form id="calc-form" class="form" novalidate>
@@ -150,29 +258,31 @@ function applyFields(step, d, e) {
   }
   return `
     <div class="panel">
-      <div class="row"><span>${esc(t("applyType"))}</span><strong>${esc(typeLabel(d.type))}</strong></div>
-      <div class="row"><span>${esc(t("applyProvince"))}</span><strong>${esc(d.province || "")}</strong></div>
-      <div class="row"><span>${esc(t("applyAppraisal"))}</span><strong>${esc(money(d.appraisal || 0))}</strong></div>
-      <div class="row"><span>${esc(t("applyAmount"))}</span><strong>${esc(money(d.amount || 0))}</strong></div>
-      <div class="row"><span>${esc(t("applyName"))}</span><strong>${esc(d.name || "")}</strong></div>
+      ${row(t("applyType"), typeLabel(d.type))}
+      ${row(t("applyProvince"), d.province || "")}
+      ${row(t("applyAppraisal"), money(d.appraisal || 0))}
+      ${row(t("applyAmount"), money(d.amount || 0))}
+      ${row(t("applyName"), d.name || "")}
     </div>
     <label class="check"><input type="checkbox" name="consent" ${d.consent ? "checked" : ""}> ${esc(t("applyConsent"))}</label>${err("consent")}`;
 }
 
+function doneView(req) {
+  return `
+    <section class="done">
+      <h1>${esc(t("applyDoneTitle"))}</h1>
+      <p>${esc(t("applyDoneRef", { id: req.id }))}</p>
+      <p class="note">${esc(t("applyDoneText"))}</p>
+      <div class="actions">
+        <a class="btn" href="#/account">${esc(t("navAccount"))}</a>
+        <button class="btn ghost" type="button" data-action="apply-again">${esc(t("applyAgain"))}</button>
+      </div>
+    </section>`;
+}
+
 function pageApply() {
   const a = S.apply;
-  if (a.done) {
-    return `
-      <section class="done">
-        <h1>${esc(t("applyDoneTitle"))}</h1>
-        <p>${esc(t("applyDoneRef", { id: a.done.id }))}</p>
-        <p class="note">${esc(t("applyDoneText"))}</p>
-        <div class="actions">
-          <a class="btn" href="#/account">${esc(t("navAccount"))}</a>
-          <button class="btn ghost" type="button" data-action="apply-again">${esc(t("applyAgain"))}</button>
-        </div>
-      </section>`;
-  }
+  if (a.done) return doneView(a.done);
   const isLast = a.step === 4;
   return `
     <h1>${esc(t("applyTitle"))}</h1>
@@ -211,7 +321,6 @@ function pageDeal(id) {
   if (!S.verified) return pageDeals();
   const d = dealById(id);
   if (!d) return `<p class="error">${esc(t("err_required"))}</p>`;
-  const row = (k, v) => `<div class="row"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`;
   return `
     <h1>${esc(d.province)} · ${esc(typeLabel(d.type))}</h1>
     <div class="panel">
@@ -249,7 +358,7 @@ function pageInvest(dealId) {
 
 function pageAccount() {
   const reqs = S.requests.length
-    ? S.requests.map((r) => `<li><strong>${esc(r.id)}</strong> · ${esc(typeLabel(r.type))} · ${esc(money(r.amount))} · ${esc(statusLabel(r.status))}</li>`).join("")
+    ? S.requests.map((r) => `<li><strong>${esc(r.id)}</strong> · ${esc(typeLabel(r.type))} · ${esc(money(r.amount))} · ${esc(statusLabel())}</li>`).join("")
     : `<li>${esc(t("none"))}</li>`;
   const ints = S.interests.length
     ? S.interests.map((i) => `<li><strong>${esc(i.id)}</strong> · ${esc(i.dealId || "-")} · ${esc(money(i.amount))} · ${esc(t("interestNew"))}</li>`).join("")
@@ -267,15 +376,13 @@ function pageAccount() {
     <div class="actions">
       <a class="link" href="#/about">${esc(t("footerAbout"))}</a>
       <a class="link" href="#/learn">${esc(t("footerLearn"))}</a>
+      <a class="link" href="#/contact">${esc(t("contactTitle"))}</a>
       <button class="btn ghost" type="button" data-action="reset">${esc(t("resetBtn"))}</button>
     </div>`;
 }
 
 function pageAbout() {
   return `<h1>${esc(t("aboutTitle"))}</h1><p>${esc(t("aboutText"))}</p>`;
-}
-function pageLearn() {
-  return `<h1>${esc(t("learnTitle"))}</h1><p class="note">${esc(t("learnText"))}</p>`;
 }
 
 // ---------- shell ----------
@@ -312,17 +419,34 @@ function render() {
   const { page, arg } = current();
   let html;
   if (page === "home") html = pageHome();
-  else if (page === "calc") html = pageCalc();
-  else if (page === "apply") html = pageApply();
-  else if (page === "deals") html = arg ? pageDeal(arg) : pageDeals();
+  else if (page === "calc" || page === "tools") html = pageCalc();
+  else if (page === "apply") {
+    html = arg === "done" && S.requests[0] ? doneView(S.requests[0]) : pageApply();
+  } else if (page === "khai-fak") {
+    if (!arg) html = pageService();
+    else if (arg === "steps") html = pageSteps();
+    else if (TYPES.includes(arg)) html = pageType(arg);
+    else if (PROVINCES.includes(arg)) html = pageProvince(arg);
+    else html = pageService();
+  } else if (page === "deals") html = arg ? pageDeal(arg) : pageDeals();
+  else if (page === "investor") html = pageInvestor();
   else if (page === "invest") html = pageInvest(arg);
   else if (page === "account") html = pageAccount();
   else if (page === "about") html = pageAbout();
-  else if (page === "learn") html = pageLearn();
+  else if (page === "faq") html = pageFaq();
+  else if (page === "contact") html = pageContact();
+  else if (page === "jamnong") html = pageJamnong();
+  else if (page === "learn") {
+    if (arg === "downloads") html = pageDownloads();
+    else if (arg === "what-is-redemption") html = pageArticle();
+    else html = pageLearnIndex();
+  } else if (page === "lp") html = pageLp(arg);
   else html = pageHome();
+
   app.innerHTML = html;
+  document.body.classList.toggle("bare", page === "lp");
   renderChrome(page);
-  document.title = `${t("brand")}`;
+  document.title = t("brand");
 }
 
 // ---------- events ----------
@@ -411,6 +535,11 @@ app.addEventListener("click", (e) => {
   } else if (action === "apply-again") {
     S.apply = freshApply();
     render();
+  } else if (action === "prefill-type" || action === "prefill-province") {
+    S.apply = freshApply();
+    if (action === "prefill-type") S.apply.draft.type = btn.dataset.type;
+    else S.apply.draft.province = btn.dataset.province;
+    location.hash = "#/apply";
   } else if (action === "verify") {
     S.verified = true;
     save("investorVerified", true);

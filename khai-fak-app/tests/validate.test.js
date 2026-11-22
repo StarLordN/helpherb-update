@@ -32,12 +32,15 @@ test("investor interest form validates name, email and amount", () => {
   assert.equal(validateInterest({ name: "J", email: "x", amount: 0 }).amount, "err_invest_amount");
 });
 
-test("all eight UI languages define the same keys as Thai", () => {
-  const base = Object.keys(dict.th).sort();
+test("all eight UI languages define the core keys, and the extra pages exist in Thai and English", async () => {
+  const { COPY_KEYS } = await import("../web/js/i18n.js");
+  const core = Object.keys(dict.th).filter((k) => !COPY_KEYS.includes(k)).sort();
   for (const code of ["en", "lo", "my", "zh", "ja", "ar", "id"]) {
-    assert.deepEqual(Object.keys(dict[code]).sort(), base, `keys differ for ${code}`);
-    for (const k of base) assert.ok(String(dict[code][k]).trim().length > 0, `${code}.${k} is empty`);
+    const keys = Object.keys(dict[code]).filter((k) => !COPY_KEYS.includes(k)).sort();
+    assert.deepEqual(keys, core, `core keys differ for ${code}`);
+    for (const k of core) assert.ok(String(dict[code][k]).trim().length > 0, `${code}.${k} is empty`);
   }
+  for (const code of ["th", "en"]) for (const k of COPY_KEYS) assert.ok(k in dict[code], `${code} missing ${k}`);
 });
 
 test("language list covers all eight dictionaries", async () => {

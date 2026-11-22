@@ -52,6 +52,28 @@ await expect(await page.evaluate(() => document.documentElement.dir) === "rtl", 
 await page.locator("#lang").selectOption("th");
 await expect(await page.evaluate(() => document.documentElement.dir) === "ltr", "thai is ltr");
 
+// Extra pages from the structure plan
+const routes = [
+  ["#/khai-fak", "บริการขายฝากอสังหาริมทรัพย์"],
+  ["#/khai-fak/steps", "ขั้นตอนขายฝาก"],
+  ["#/khai-fak/house", "บ้าน"],
+  ["#/khai-fak/" + encodeURIComponent("นนทบุรี"), "นนทบุรี"],
+  ["#/faq", "คำถามที่พบบ่อย"],
+  ["#/contact", "ติดต่อเรา"],
+  ["#/learn/what-is-redemption", "ขายฝากคืออะไร"],
+  ["#/learn/downloads", "ดาวน์โหลด"],
+  ["#/jamnong", "จำนอง"],
+  ["#/investor", "พอร์ตนักลงทุน"],
+];
+for (const [hash, text] of routes) {
+  await page.goto(BASE + hash);
+  await expect(await page.getByText(text).count() > 0, `route ${hash} shows "${text}"`);
+}
+// Landing page has no main navigation
+await page.goto(BASE + "#/lp/test-campaign");
+await expect(await page.getByText("ประเมินวงเงินฟรี").count() > 0, "landing page content");
+await expect(await page.locator("#tabs").isVisible() === false, "landing page hides tabs");
+
 await page.screenshot({ path: process.env.SHOT || "smoke-deals.png" });
 await browser.close();
 
