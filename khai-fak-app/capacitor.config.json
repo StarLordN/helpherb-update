@@ -1,0 +1,8 @@
+{
+  "appId": "com.example.khaifak",
+  "appName": "ขายฝาก (ต้นแบบ)",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

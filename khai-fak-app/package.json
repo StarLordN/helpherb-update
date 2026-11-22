@@ -1,0 +1,14 @@
+{
+  "name": "khai-fak-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Prototype web app (PWA) and mobile app shell for the property redemption concept. Demo only.",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node scripts/serve.js",
+    "test": "node --test \"tests/*.test.js\"",
+    "build:www": "node scripts/build-www.js",
+    "smoke": "node scripts/smoke.mjs"
+  }
+}
