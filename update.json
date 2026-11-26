@@ -1,6 +1,6 @@
 {
-    "version":  "2.3.0",
-    "url":  "https://github.com/StarLordN/helpherb-update/releases/download/v2.3.0/HelpHerb_PCU_V2-Setup-2.3.0.exe",
-    "sha256":  "71dfcae2888f1e933165638ccb1a06989e637e802795152207deca8c7be31f12",
-    "notes":  "HelpHerb_PCU V.2 เวอร์ชัน 2.3.0: อ่าน HN จากหัวข้อมูลผู้ป่วยและตรวจชื่อ, จำสิทธิรายผู้ป่วย, อ่านตาราง CC/วินิจฉัยด้วย OCR ภาษาไทย"
+  "version": "2.4.0",
+  "url": "https://github.com/StarLordN/helpherb-update/releases/download/v2.4.0/HelpHerb_PCU_V2-Setup-2.4.0.exe",
+  "sha256": "9a067e7ed3eac9fc51188080f9b55eb21e8491bb98129db1f762c87e51abfedc",
+  "notes": "HelpHerb_PCU V.2 เวอร์ชัน 2.4.0 : สแกนหน้าจอไว 1 วินาที, รองรับหลายเบราว์เซอร์พร้อมตัวทดสอบเบราว์เซอร์ (Edge/Chrome/Firefox/Brave), ผูกช่องทางอัปเดตออนไลน์ GitHub อัตโนมัติ, แนบอินโฟกราฟิกคู่มือและ 17 คอร์สยาสมุนไพรในตัว"
 }
