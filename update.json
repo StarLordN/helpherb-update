@@ -1,6 +1,6 @@
 {
-  "version": "2.4.0",
-  "url": "https://github.com/StarLordN/helpherb-update/releases/download/v2.4.0/HelpHerb_PCU_V2-Setup-2.4.0.exe",
-  "sha256": "9a067e7ed3eac9fc51188080f9b55eb21e8491bb98129db1f762c87e51abfedc",
-  "notes": "HelpHerb_PCU V.2 เวอร์ชัน 2.4.0 : สแกนหน้าจอไว 1 วินาที, รองรับหลายเบราว์เซอร์พร้อมตัวทดสอบเบราว์เซอร์ (Edge/Chrome/Firefox/Brave), ผูกช่องทางอัปเดตออนไลน์ GitHub อัตโนมัติ, แนบอินโฟกราฟิกคู่มือและ 17 คอร์สยาสมุนไพรในตัว"
+  "version": "2.4.1",
+  "url": "https://github.com/StarLordN/helpherb-update/releases/download/v2.4.1/HelpHerb_PCU_V2-Setup-2.4.1.exe",
+  "sha256": "7db4a3c08b7ec78ece62d5ec80125c7e054ec0b22582be4bb0ce7a9c6faf4166",
+  "notes": "HelpHerb_PCU V.2 เวอร์ชัน 2.4.1 : แก้ไขการอ่านสิทธิบนหน้าจอ HOSxP โดยตั้งค่าให้อ่านจากตัวอักษรที่มีสีเป็นหลัก (แถบข้อมูลผู้ป่วย) คัดแยกพิกเซลสีเพิ่มความแม่นยำ OCR พร้อมตัวเลือกตั้งค่าในโปรแกรม"
 }
